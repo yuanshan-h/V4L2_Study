@@ -22,9 +22,12 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 # 可选：设置输出目录
 set(OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
+<<<<<<< HEAD
 # 添加静态链接标志
 set(CMAKE_EXE_LINKER_FLAGS "-static")
 
+=======
+>>>>>>> cadcbc78fade9f1e2088c26d6e072485c337c8ee
 # 创建可执行文件
 add_executable(video_test video_test.c)
 

@@ -1,0 +1,20 @@
+# Build outputs
+build/
+bin/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.o
+*.a
+*.so
+*.d
+*.log
+
+# CMake intermediates
+**/CMakeTmp/
+**/progress.marks
+**/*.dir/
+
+# VS Code
+.vscode/
