@@ -1,0 +1,5 @@
+/home/yuanshan/workplace/DeskRobot/zeta/Demo/V4L2_Vdieo/build/CMakeFiles/video_test.dir
+/home/yuanshan/workplace/DeskRobot/zeta/Demo/V4L2_Vdieo/build/CMakeFiles/run.dir
+/home/yuanshan/workplace/DeskRobot/zeta/Demo/V4L2_Vdieo/build/CMakeFiles/clean-all.dir
+/home/yuanshan/workplace/DeskRobot/zeta/Demo/V4L2_Vdieo/build/CMakeFiles/edit_cache.dir
+/home/yuanshan/workplace/DeskRobot/zeta/Demo/V4L2_Vdieo/build/CMakeFiles/rebuild_cache.dir
