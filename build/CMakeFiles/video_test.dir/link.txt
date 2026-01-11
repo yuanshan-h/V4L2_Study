@@ -1,1 +1,0 @@
-arm-linux-gnueabihf-gcc -static CMakeFiles/video_test.dir/video_test.c.o -o ../bin/video_test 
