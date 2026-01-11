@@ -5,10 +5,9 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
-#include <linux/types.h>          /* for videodev2.h */
+#include <errno.h>
+#include <linux/types.h>
 #include <linux/videodev2.h>
-
-/* ./video_test </dev/video0> */
 
 int main(int argc, char **argv)
 {
@@ -20,37 +19,49 @@ int main(int argc, char **argv)
 
     if (argc != 2)
     {
-        printf("Usage: %s </dev/videoX>, print format detail for video device\n", argv[0]);
+        printf("Usage: %s </dev/videoX>\n", argv[0]);
         return -1;
     }
 
-    /* open */
     fd = open(argv[1], O_RDWR);
     if (fd < 0)
     {
         printf("can not open %s\n", argv[1]);
         return -1;
     }
+    printf("Successfully opened %s (fd=%d)\n", argv[1], fd);
 
     while (1)
     {
-        /* 枚举格式 */
-        fmtdesc.index = fmt_index;  // 比如从0开始
-        fmtdesc.type  = V4L2_BUF_TYPE_VIDEO_CAPTURE;  // 指定type为"捕获"
+        /* 枚举格式 - 使用 MULTIPLANAR 类型 */
+        memset(&fmtdesc, 0, sizeof(struct v4l2_fmtdesc));
+        fmtdesc.index = fmt_index;
+        fmtdesc.type  = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;  // 改为 MPLANE
+        
         if (0 != ioctl(fd, VIDIOC_ENUM_FMT, &fmtdesc))
+        {
+            if (fmt_index == 0)
+            {
+                printf("Device does not support format enumeration. Error: %s\n", strerror(errno));
+            }
+            else
+            {
+                printf("No more formats at index %d\n", fmt_index);
+            }
             break;
+        }
+        printf("Format %d: %s (pixelformat: 0x%08x)\n", fmt_index, fmtdesc.description, fmtdesc.pixelformat);
 
         frame_index = 0;
         while (1)
         {
-            /* 枚举这种格式所支持的帧大小 */
             memset(&fsenum, 0, sizeof(struct v4l2_frmsizeenum));
             fsenum.pixel_format = fmtdesc.pixelformat;
             fsenum.index = frame_index;
 
             if (ioctl(fd, VIDIOC_ENUM_FRAMESIZES, &fsenum) == 0)
             {
-                printf("format %s,%d, framesize %d: %d x %d\n", fmtdesc.description, fmtdesc.pixelformat, frame_index, fsenum.discrete.width, fsenum.discrete.height);
+                printf("  framesize %d: %d x %d\n", frame_index, fsenum.discrete.width, fsenum.discrete.height);
             }
             else
             {
@@ -63,5 +74,6 @@ int main(int argc, char **argv)
         fmt_index++;
     }
 
+    close(fd);
     return 0;
 }
